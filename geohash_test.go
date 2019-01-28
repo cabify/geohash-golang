@@ -1,6 +1,10 @@
 package geohash
 
-import "testing"
+import (
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 type geohashTest struct {
 	input  string
@@ -99,5 +103,64 @@ func TestEncode(t *testing.T) {
 				t.Errorf("expectd %s, got %s", test.geohash, geohash)
 			}
 		}
+	}
+}
+
+func TestCalculateAdjacent(t *testing.T) {
+	for _, test := range []struct {
+		geohash  string
+		dir      string
+		adjacent string
+	}{
+		{
+			geohash:  "zbzury",
+			dir:      "right",
+			adjacent: "b0bh2n",
+		},
+		{
+			geohash:  "b0bh2n",
+			dir:      "bottom",
+			adjacent: "b0bh2j",
+		},
+		{
+			geohash:  "b0bh2j",
+			dir:      "left",
+			adjacent: "zbzurv",
+		},
+		{
+			geohash:  "zbzurv",
+			dir:      "left",
+			adjacent: "zbzurt",
+		},
+		{
+			geohash:  "zbzurt",
+			dir:      "up",
+			adjacent: "zbzurw",
+		},
+		{
+			geohash:  "zbzurw",
+			dir:      "up",
+			adjacent: "zbzurx",
+		},
+		{
+			geohash:  "zbzurx",
+			dir:      "right",
+			adjacent: "zbzurz",
+		},
+		{
+			geohash:  "zbzurz",
+			dir:      "right",
+			adjacent: "b0bh2p",
+		},
+		{
+			geohash:  "b0bh2p",
+			dir:      "bottom",
+			adjacent: "b0bh2n",
+		},
+	} {
+		t.Run(fmt.Sprintf("%s -> %s -> %s", test.geohash, test.dir, test.adjacent), func(t *testing.T) {
+			adjacent := CalculateAdjacent(test.geohash, test.dir)
+			assert.Equal(t, test.adjacent, adjacent)
+		})
 	}
 }

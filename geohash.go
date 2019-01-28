@@ -70,7 +70,7 @@ func CalculateAdjacent(s, dir string) string {
 	}
 	// base := s[0:]
 	base := s[:(len(s) - 1)]
-	if strings.Index(borders[dirInt][oddEven], lastChr) != -1 {
+	if strings.Index(borders[dirInt][oddEven], lastChr) != -1 && len(base) > 0 {
 		base = CalculateAdjacent(base, dir)
 	}
 	return base + string(base32[strings.Index(neighbors[dirInt][oddEven], lastChr)])
