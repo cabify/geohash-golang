@@ -101,3 +101,66 @@ func TestEncode(t *testing.T) {
 		}
 	}
 }
+
+type adjacentTest struct {
+	geohash string
+	dir string
+	adjacent string
+}
+
+func TestCalculateAdjacent(t *testing.T) {
+	var tests = []adjacentTest{
+		adjacentTest {
+			geohash: "zbzury",
+			dir: "right",
+			adjacent: "b0bh2n",
+		},
+		adjacentTest {
+			geohash: "b0bh2n",
+			dir: "bottom",
+			adjacent: "b0bh2j",
+		},
+		adjacentTest {
+			geohash: "b0bh2j",
+			dir: "left",
+			adjacent: "zbzurv",
+		},
+		adjacentTest {
+			geohash: "zbzurv",
+			dir: "left",
+			adjacent: "zbzurt",
+		},
+		adjacentTest {
+			geohash: "zbzurt",
+			dir: "up",
+			adjacent: "zbzurw",
+		},
+		adjacentTest {
+			geohash: "zbzurw",
+			dir: "up",
+			adjacent: "zbzurx",
+		},
+		adjacentTest {
+			geohash: "zbzurx",
+			dir: "right",
+			adjacent: "zbzurz",
+		},
+		adjacentTest {
+			geohash: "zbzurz",
+			dir: "right",
+			adjacent: "b0bh2p",
+		},
+		adjacentTest {
+			geohash: "b0bh2p",
+			dir: "bottom",
+			adjacent: "b0bh2n",
+		},
+	}
+
+	for _, test := range tests {
+		adjacent := CalculateAdjacent(test.geohash, test.dir)
+		if test.adjacent != adjacent {
+			t.Errorf("expectd %s, got %s", test.adjacent, adjacent)
+		}
+	}
+}
