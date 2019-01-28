@@ -160,7 +160,7 @@ func TestCalculateAdjacent(t *testing.T) {
 	for _, test := range tests {
 		adjacent := CalculateAdjacent(test.geohash, test.dir)
 		if test.adjacent != adjacent {
-			t.Errorf("expectd %s, got %s", test.adjacent, adjacent)
+			t.Errorf("expected %s, got %s", test.adjacent, adjacent)
 		}
 	}
 }
