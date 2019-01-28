@@ -1,6 +1,10 @@
 package geohash
 
-import "testing"
+import (
+	"fmt"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 type geohashTest struct {
 	input  string
@@ -102,65 +106,61 @@ func TestEncode(t *testing.T) {
 	}
 }
 
-type adjacentTest struct {
-	geohash string
-	dir string
-	adjacent string
-}
-
 func TestCalculateAdjacent(t *testing.T) {
-	var tests = []adjacentTest{
-		adjacentTest {
-			geohash: "zbzury",
-			dir: "right",
+	for _, test := range []struct {
+		geohash  string
+		dir      string
+		adjacent string
+	}{
+		{
+			geohash:  "zbzury",
+			dir:      "right",
 			adjacent: "b0bh2n",
 		},
-		adjacentTest {
-			geohash: "b0bh2n",
-			dir: "bottom",
+		{
+			geohash:  "b0bh2n",
+			dir:      "bottom",
 			adjacent: "b0bh2j",
 		},
-		adjacentTest {
-			geohash: "b0bh2j",
-			dir: "left",
+		{
+			geohash:  "b0bh2j",
+			dir:      "left",
 			adjacent: "zbzurv",
 		},
-		adjacentTest {
-			geohash: "zbzurv",
-			dir: "left",
+		{
+			geohash:  "zbzurv",
+			dir:      "left",
 			adjacent: "zbzurt",
 		},
-		adjacentTest {
-			geohash: "zbzurt",
-			dir: "up",
+		{
+			geohash:  "zbzurt",
+			dir:      "up",
 			adjacent: "zbzurw",
 		},
-		adjacentTest {
-			geohash: "zbzurw",
-			dir: "up",
+		{
+			geohash:  "zbzurw",
+			dir:      "up",
 			adjacent: "zbzurx",
 		},
-		adjacentTest {
-			geohash: "zbzurx",
-			dir: "right",
+		{
+			geohash:  "zbzurx",
+			dir:      "right",
 			adjacent: "zbzurz",
 		},
-		adjacentTest {
-			geohash: "zbzurz",
-			dir: "right",
+		{
+			geohash:  "zbzurz",
+			dir:      "right",
 			adjacent: "b0bh2p",
 		},
-		adjacentTest {
-			geohash: "b0bh2p",
-			dir: "bottom",
+		{
+			geohash:  "b0bh2p",
+			dir:      "bottom",
 			adjacent: "b0bh2n",
 		},
-	}
-
-	for _, test := range tests {
-		adjacent := CalculateAdjacent(test.geohash, test.dir)
-		if test.adjacent != adjacent {
-			t.Errorf("expected %s, got %s", test.adjacent, adjacent)
-		}
+	} {
+		t.Run(fmt.Sprintf("%s -> %s -> %s", test.geohash, test.dir, test.adjacent), func(t *testing.T) {
+			adjacent := CalculateAdjacent(test.geohash, test.dir)
+			assert.Equal(t, test.adjacent, adjacent)
+		})
 	}
 }
